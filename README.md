@@ -125,31 +125,42 @@ PostgreSQL contains six indexes on the `arrests` table:
 
 These indexes improve searches, filtering, grouping, and geographic-data preparation.
 
-## Map Data Export
+## PostgreSQL Mapping Workflow
 
-The map-ready data is exported locally to:
+`NYPD_postgresql_mapping.ipynb` connects directly to the local PostgreSQL database using SQLAlchemy and psycopg2. The PostgreSQL password is requested at runtime with `getpass()` and is never stored in the notebook or committed to Git.
+
+The mapping query:
+
+- Filters records to the expected NYC coordinate range
+- Groups nearby records into geographic bins
+- Counts arrest records within each bin
+- Uses a window function to identify the most common offense
+- Returns 63,619 geographically valid arrest records
+
+Folium then creates an interactive Leaflet map containing:
+
+- An arrest-record density heat layer
+- Geographic-bin markers
+- Hover totals
+- Clickable offense-detail popups
+- Interactive layer controls
+
+The completed map is saved to:
 
 ```text
-data/processed/nypd_arrests_map.csv
-```
-
-The exported file contains:
-
-- 63,619 arrest records
-- One header row
-- 63,620 total CSV lines
-
-The export is generated with the psql `\copy` command documented in `06_export_map_data.sql`.
+outputs/maps/nypd_postgresql_arrest_map.html
 
 ## Technologies
 
 - Python
 - pandas
-- Jupyter Notebook
 - Matplotlib
-- Seaborn
-- Plotly
+- SciPy
+- Folium and Leaflet
+- Jupyter Notebook
 - PostgreSQL
+- SQLAlchemy
+- psycopg2
 - psql
 - Git and GitHub
 - Visual Studio Code
@@ -158,8 +169,13 @@ The export is generated with the psql `\copy` command documented in `06_export_m
 
 ```text
 Data_Project_1/
+├── Data_Project_1/
+│   └── NYPD_Arrest_Data__Year_to_Date__20240702.csv
 ├── data/
 │   └── processed/
+├── outputs/
+│   └── maps/
+│       └── nypd_postgresql_arrest_map.html
 ├── sql/
 │   ├── 00_create_database.sql
 │   ├── 01_create_arrests_table.sql
@@ -168,13 +184,18 @@ Data_Project_1/
 │   ├── 04_exploratory_queries.sql
 │   ├── 05_create_indexes.sql
 │   └── 06_export_map_data.sql
-├── archive/
 ├── NYPD_arrest_analysis.ipynb
-├── Geographical_analysis.ipynb
+├── NYPD_postgresql_mapping.ipynb
 ├── NYPD_Crime_Project.pptx
 ├── Project_1_Proposal.pdf
-└── README.md
-```
+├── README.md
+└── requirements.txt
+
+
+Save `README.md`, then run:
+
+```bash
+git status --short
 
 ## Summary
 
