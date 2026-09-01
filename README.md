@@ -191,7 +191,8 @@ The generated map is saved at:
 outputs/maps/nypd_postgresql_arrest_map.html
 ```
 
-The HTML file is committed to the repository and will be published as an interactive webpage using GitHub Pages.
+Explore the deployed project: **[Open the interactive NYPD Arrest Data Map](https://a1990alpalo.github.io/Data_Project_1/)**.
+
 
 ## Technologies
 
